@@ -37,4 +37,7 @@ Thumbs.db
 
 # Ignore by default, but allow SDL3/include
 /external/SDL3/*
-!/external/SDL3/include/
+!/external/SDL3/include
+
+# Ignore ImGui
+imgui.ini

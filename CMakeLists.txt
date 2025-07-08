@@ -8,12 +8,15 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
 endif()
 
-# SDL3
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}/out/Release")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}/out/Debug")
+
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG -march=native -flto")
+set(CMAKE_EXE_LINKER_FLAGS_RELEASE "-s")
+
 set(SDL3_DIR "${CMAKE_SOURCE_DIR}/external/SDL3")
 set(SDL3_INCLUDE_DIR "${SDL3_DIR}/include")
 set(SDL3_LIB_DIR "${SDL3_DIR}/lib/x64")
-
-# ImGui
 set(IMGUI_DIR "${CMAKE_SOURCE_DIR}/external/imgui")
 
 add_executable(Game
@@ -68,3 +71,13 @@ add_custom_command(TARGET Game POST_BUILD
         "${CMAKE_SOURCE_DIR}/assets"
         "$<TARGET_FILE_DIR:Game>/assets"
 )
+
+install(TARGETS Game DESTINATION .)
+
+install(FILES
+    "${SDL3_LIB_DIR}/SDL3.dll"
+    "${SDL3_LIB_DIR}/SDL3_image.dll"
+    DESTINATION .
+)
+
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/assets" DESTINATION .)
