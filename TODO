@@ -1,4 +1,13 @@
-- Scene manager / World manager
-- Physics engine
-- Object manager for items and entities
-- Some kind of level format (Maybe JSON or custom binary based format)
+== ENGINE ==
+[ ] Scene manager / World manager
+[ ] Physics engine
+[ ] Object manager for items and entities
+[ ] Some kind of level format (Maybe JSON or custom binary based format)
+[ ] Audio managerr
+[ ] Maybe networking??? (idk if we should do multiplayer or not)
+[ ] Maybe some kind of scripting engine like lua, for modding support
+[ ] Sprite manager / Animation manager
+
+== STRUCTURE ==
+[ ] Move engine code into its own folder(s) and produce a library
+[ ] Link game with engine library (dll, etc.)
