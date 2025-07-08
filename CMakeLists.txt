@@ -18,7 +18,7 @@ set(SDL3_INCLUDE_DIR "${SDL3_DIR}/include")
 set(SDL3_LIB_DIR "${SDL3_DIR}/lib/x64")
 set(IMGUI_DIR "${CMAKE_SOURCE_DIR}/external/imgui")
 
-add_executable(Game
+set(SOURCES
     src/Game.cpp
     src/Renderer/Draw.cpp
     src/Renderer/Renderer.cpp
@@ -26,15 +26,19 @@ add_executable(Game
     src/Renderer/TextureManager.cpp
     src/Math/Vector.cpp
     src/Core/Input.cpp
-
     ${IMGUI_DIR}/imgui.cpp
     ${IMGUI_DIR}/imgui_draw.cpp
     ${IMGUI_DIR}/imgui_tables.cpp
     ${IMGUI_DIR}/imgui_widgets.cpp
-
     ${IMGUI_DIR}/backends/imgui_impl_sdl3.cpp
     ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
 )
+
+if(WIN32)
+    list(APPEND SOURCES src/Windows.cpp)
+endif()
+
+add_executable(Game ${SOURCES})
 
 target_include_directories(Game PRIVATE
     ${SDL3_INCLUDE_DIR}
@@ -48,13 +52,21 @@ target_compile_definitions(Game PRIVATE
     $<$<CONFIG:Release>:RELEASE_BUILD>
 )
 
-target_compile_options(Game PRIVATE 
-    $<$<CONFIG:Release>:-O3 -DNDEBUG -march=native -flto>
-)
-
-target_link_options(Game PRIVATE 
-    $<$<CONFIG:Release>:-s>
-)
+if(WIN32)
+    target_compile_definitions(Game PRIVATE $<$<CONFIG:Release>:USE_WINMAIN_WRAPPER>)
+    target_compile_options(Game PRIVATE
+        $<$<CONFIG:Release>:/O2 /DNDEBUG /GL>
+    )
+    target_link_options(Game PRIVATE
+        $<$<CONFIG:Debug>:/SUBSYSTEM:CONSOLE>
+        $<$<CONFIG:Release>:/SUBSYSTEM:WINDOWS /LTCG>
+        $<$<CONFIG:Release>:-s>
+    )
+else()
+    target_compile_options(Game PRIVATE
+        $<$<CONFIG:Release>:-O3 -DNDEBUG -march=native -flto>
+    )
+endif()
 
 target_link_libraries(Game 
     "${SDL3_LIB_DIR}/SDL3.lib"
@@ -83,6 +95,5 @@ install(TARGETS Game DESTINATION .)
 install(FILES
     "${SDL3_LIB_DIR}/SDL3.dll"
     "${SDL3_LIB_DIR}/SDL3_image.dll"
-    DESTINATION .
-)
+    DESTINATION .)
 install(DIRECTORY "${CMAKE_SOURCE_DIR}/assets" DESTINATION .)
