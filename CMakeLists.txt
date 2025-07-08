@@ -8,8 +8,7 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the build type." FORCE)
 endif()
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/out")
-foreach(OUTPUTCONFIG IN ITEMS Debug Release)
+foreach(OUTPUTCONFIG IN ITEMS Debug Release RelWithDebInfo MinSizeRel)
     string(TOUPPER "${OUTPUTCONFIG}" OUTPUTCONFIG_UPPER)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG_UPPER} "${CMAKE_BINARY_DIR}/out/${OUTPUTCONFIG}")
 endforeach()
@@ -63,7 +62,7 @@ target_link_libraries(Game
 )
 
 find_package(OpenGL REQUIRED)
-if (OPENGL_FOUND)
+if(OPENGL_FOUND)
     target_include_directories(Game PRIVATE ${OPENGL_INCLUDE_DIR})
     target_link_libraries(Game ${OPENGL_gl_LIBRARY})
 else()
