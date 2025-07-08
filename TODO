@@ -1,1 +1,4 @@
-- Scene manager
+- Scene manager / World manager
+- Physics engine
+- Object manager for items and entities
+- Some kind of level format (Maybe JSON or custom binary based format)
