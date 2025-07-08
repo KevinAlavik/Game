@@ -29,7 +29,8 @@ namespace Renderer {
         // Low-level window functions
         Window(const std::string& title, Math::Vector2f size);
         ~Window();
-        SDL_Window* GetRawWindow();
+        SDL_Window* GetRawWindow() const;
+        SDL_GLContext GetGLContext() const;
         void Poll();
         SDL_Event GetLastEvent() const;
     public:

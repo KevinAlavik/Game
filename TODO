@@ -11,3 +11,7 @@
 == STRUCTURE ==
 [ ] Move engine code into its own folder(s) and produce a library
 [ ] Link game with engine library (dll, etc.)
+[ ] Cleanup Game.cpp
+
+== INPUT ==
+[ ] Fix weird keyboard input issues

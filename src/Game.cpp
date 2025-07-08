@@ -9,6 +9,11 @@
 #include <SDL3/SDL.h>
 #include <Core/Input.hpp>
 
+// ImGui includes
+#include <imgui.h>
+#include <backends/imgui_impl_sdl3.h>
+#include <backends/imgui_impl_opengl3.h>
+
 namespace Game {
     Util::Logger logger("Main");
     Renderer::Window* window = nullptr;
@@ -42,10 +47,25 @@ namespace {
 
         textureManager = new Renderer::TextureManager();
         shrekTexture = textureManager->AddTextureFromFile("shrek", "assets/shrek.png");
+
+        // ImGui initialization
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+        ImGui::StyleColorsDark();
+
+        ImGui_ImplSDL3_InitForOpenGL(rawWindow, window->GetGLContext());
+        ImGui_ImplOpenGL3_Init("#version 330 core");
+
         return true;
     }
 
     void Cleanup() {
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplSDL3_Shutdown();
+        ImGui::DestroyContext();
+
         delete textureManager;
         textureManager = nullptr;
 
@@ -68,6 +88,19 @@ namespace {
             mousePos.y <= (texPos.y + halfHeight);
     }
 
+    void RenderImGui() {
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplSDL3_NewFrame();
+        ImGui::NewFrame();
+
+        bool show_window = false;
+        ImGui::Begin("Controls", &show_window, ImGuiWindowFlags_NoResize);
+        ImGui::Text("Use WASD to move the texture");
+        ImGui::Text("Left click and drag to move the texture around");
+        ImGui::Text("Press ESC to exit");
+        ImGui::End();
+	}
+
     void MainLoop() {
         Math::Vector2f mousePos(0.0f, 0.0f);
 
@@ -83,6 +116,9 @@ namespace {
             Game::window->UpdateFPS();
             Game::window->SetTitle("Game - FPS: " + std::to_string(Game::window->GetFPS()));
             float deltaTime = Game::window->GetDeltaTime();
+
+            // Render ImGui frame
+            RenderImGui();
 
             // Handle mouse events
             mousePos = Core::Input::GetMousePosition();
@@ -117,36 +153,46 @@ namespace {
                 texturePos.x += moveSpeed * deltaTime;
             }
 
-			// Handle ESC key to exit
+            // Handle ESC key to exit
             if (Core::Input::IsKeyDown(SDL_SCANCODE_ESCAPE)) {
                 Game::window->Poll();
                 break;
-			}
+            }
 
-			// Clamp texture position to screen bounds
-			float halfWidth = Game::shrekTexture->size.x / 2.0f;
-			float halfHeight = Game::shrekTexture->size.y / 2.0f;
-			if (texturePos.x < halfWidth) {
-				texturePos.x = halfWidth;
-			}
-			if (texturePos.x > Game::screenSize.x - halfWidth) {
-				texturePos.x = Game::screenSize.x - halfWidth;
-			}
-			if (texturePos.y < halfHeight) {
-				texturePos.y = halfHeight;
-			}
-			if (texturePos.y > Game::screenSize.y - halfHeight) {
-				texturePos.y = Game::screenSize.y - halfHeight;
-			}
+            // Clamp texture position to screen bounds
+            float halfWidth = Game::shrekTexture->size.x / 2.0f;
+            float halfHeight = Game::shrekTexture->size.y / 2.0f;
+            if (texturePos.x < halfWidth) {
+                texturePos.x = halfWidth;
+            }
+            if (texturePos.x > Game::screenSize.x - halfWidth) {
+                texturePos.x = Game::screenSize.x - halfWidth;
+            }
+            if (texturePos.y < halfHeight) {
+                texturePos.y = halfHeight;
+            }
+            if (texturePos.y > Game::screenSize.y - halfHeight) {
+                texturePos.y = Game::screenSize.y - halfHeight;
+            }
 
             // Render
             Renderer::Draw::Clear(Math::Vector4f(1.0f, 1.0f, 1.0f, 1.0f));
             Renderer::Draw::TexturedQuad(Game::shrekTexture->id, Game::shrekTexture->size, texturePos);
+
+            // ImGui render
+            ImGui::Render();
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+            
+			// Finish the rendering
             Renderer::Render(Game::window);
 
             // Poll events
             Game::window->Poll();
-			Core::Input::ProcessEvent(Game::window->GetLastEvent());
+
+            // Feed events to ImGui and your input system
+            SDL_Event e = Game::window->GetLastEvent();
+            ImGui_ImplSDL3_ProcessEvent(&e);
+            Core::Input::ProcessEvent(e);
         }
     }
 }
@@ -158,9 +204,9 @@ int main(int argc, char* argv[]) {
         }
 
         logger.Info("--- My Epic Game ---");
-		logger.Info("Use: WASD to move the texture");
-		logger.Info("Left click and drag to move the texture around");
-		logger.Info("Press ESC to exit");
+        logger.Info("Use: WASD to move the texture");
+        logger.Info("Left click and drag to move the texture around");
+        logger.Info("Press ESC to exit");
         logger.Info("--------------------");
         MainLoop();
         Cleanup();

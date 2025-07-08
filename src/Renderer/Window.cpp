@@ -47,8 +47,12 @@ Window::~Window() {
     }
 }
 
-SDL_Window* Window::GetRawWindow() {
+SDL_Window* Window::GetRawWindow() const {
     return m_window;
+}
+
+SDL_GLContext Window::GetGLContext() const {
+    return m_glcontext; 
 }
 
 void Window::Poll() {

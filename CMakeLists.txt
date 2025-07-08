@@ -8,21 +8,37 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
 endif()
 
+# SDL3
 set(SDL3_DIR "${CMAKE_SOURCE_DIR}/external/SDL3")
 set(SDL3_INCLUDE_DIR "${SDL3_DIR}/include")
 set(SDL3_LIB_DIR "${SDL3_DIR}/lib/x64")
 
+# ImGui
+set(IMGUI_DIR "${CMAKE_SOURCE_DIR}/external/imgui")
+
 add_executable(Game
-    "src/Game.cpp"
+    src/Game.cpp
     src/Renderer/Draw.cpp
-    
     src/Renderer/Renderer.cpp
     src/Renderer/Window.cpp
- "src/Renderer/TextureManager.cpp" "src/Math/Vector.cpp"  "src/Core/Input.cpp")
+    src/Renderer/TextureManager.cpp
+    src/Math/Vector.cpp
+    src/Core/Input.cpp
+
+    ${IMGUI_DIR}/imgui.cpp
+    ${IMGUI_DIR}/imgui_draw.cpp
+    ${IMGUI_DIR}/imgui_tables.cpp
+    ${IMGUI_DIR}/imgui_widgets.cpp
+
+    ${IMGUI_DIR}/backends/imgui_impl_sdl3.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+)
 
 target_include_directories(Game PRIVATE
     ${SDL3_INCLUDE_DIR}
     "${CMAKE_SOURCE_DIR}/include"
+    ${IMGUI_DIR}
+    ${IMGUI_DIR}/backends
 )
 
 target_compile_definitions(Game PRIVATE 
