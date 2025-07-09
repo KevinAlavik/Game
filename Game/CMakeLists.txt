@@ -25,20 +25,30 @@ target_compile_definitions(Game PRIVATE
 )
 
 if(WIN32)
+    target_compile_definitions(Game PRIVATE $<$<CONFIG:Release>:USE_WINMAIN_WRAPPER>)
+
+    if(MSVC)
+        target_compile_options(Game PRIVATE
+            $<$<CONFIG:Release>:/O2 /DNDEBUG /GL>
+        )
+        target_link_options(Game PRIVATE
+            $<$<CONFIG:Debug>:/SUBSYSTEM:CONSOLE>
+            $<$<CONFIG:Release>:/SUBSYSTEM:WINDOWS /LTCG -s>
+        )
+    else()
+        target_compile_options(Game PRIVATE
+            $<$<CONFIG:Release>:-O2 -DNDEBUG -flto>
+        )
+        target_link_options(Game PRIVATE
+            $<$<CONFIG:Debug>:-Wl,--subsystem,console>
+            $<$<CONFIG:Release>:-Wl,--subsystem,windows -s>
+        )
+    endif()
+
     set(SDL3_DIR "${CMAKE_SOURCE_DIR}/External/SDL3")
     set(SDL3_LIB_DIR "${SDL3_DIR}/lib/x64")
 
     target_include_directories(Game PRIVATE "${SDL3_DIR}/include")
-
-    target_compile_definitions(Game PRIVATE $<$<CONFIG:Release>:USE_WINMAIN_WRAPPER>)
-    target_compile_options(Game PRIVATE
-        $<$<CONFIG:Release>:/O2 /DNDEBUG /GL>
-    )
-    target_link_options(Game PRIVATE
-        $<$<CONFIG:Debug>:/SUBSYSTEM:CONSOLE>
-        $<$<CONFIG:Release>:/SUBSYSTEM:WINDOWS /LTCG>
-        $<$<CONFIG:Release>:-s>
-    )
 
     add_custom_command(TARGET Game POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
@@ -49,6 +59,17 @@ if(WIN32)
             "${CMAKE_SOURCE_DIR}/assets"
             "$<TARGET_FILE_DIR:Game>/assets"
     )
+
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        add_custom_command(TARGET Game POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                # THIS IS BAD
+                "/usr/x86_64-w64-mingw32/bin/libgcc_s_seh-1.dll"
+                "/usr/x86_64-w64-mingw32/bin/libwinpthread-1.dll"
+                "/usr/x86_64-w64-mingw32/bin/libstdc++-6.dll"
+                $<TARGET_FILE_DIR:Game>
+        )
+    endif()
 
 else()
     find_package(PkgConfig REQUIRED)

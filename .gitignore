@@ -1,7 +1,7 @@
 # Build and IDE files
 /.vs/
 /out/
-/build/
+/build*/
 /CMakeFiles/
 /CMakeCache.txt
 /*.sln

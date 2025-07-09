@@ -72,5 +72,11 @@ else()
 endif()
 
 find_package(OpenGL REQUIRED)
+
+message(STATUS "OpenGL library: ${OPENGL_gl_LIBRARY}")
 target_include_directories(GameEngine PUBLIC ${OPENGL_INCLUDE_DIR})
+if(WIN32)
+target_link_libraries(GameEngine PUBLIC ${OPENGL_gl_LIBRARY})
+else()
 target_link_libraries(GameEngine PUBLIC GL)
+endif()
