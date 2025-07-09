@@ -1,4 +1,3 @@
-# Build and IDE files
 /.vs/
 /out/
 /build*/
@@ -8,22 +7,15 @@
 /*.vcxproj*
 /*.user
 
-# Compiled binaries
 *.exe
-*.dll
 *.obj
-*.lib
-*.pdb
 
-# Logs and temp files
 *.log
 *.tmp
 
-# OS generated files
 .DS_Store
 Thumbs.db
 
-# CMake generated files
 /CMakeScripts/
 /Testing/
 /Makefile
@@ -31,13 +23,4 @@ Thumbs.db
 /cmake_install.cmake
 /CTestTestfile.cmake
 
-# Ignore external library binaries (keep source/headers)
-/external/SDL3/lib/
-/external/SDL3/*.dll
-
-# Ignore by default, but allow SDL3/include
-/external/SDL3/*
-!/external/SDL3/include
-
-# Ignore ImGui
 imgui.ini

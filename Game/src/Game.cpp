@@ -15,7 +15,7 @@
 #include <backends/imgui_impl_opengl3.h>
 
 namespace Game {
-    Util::Logger logger("Main");
+    Util::Logger logger("MainGame");
     Renderer::Window* window = nullptr;
     SDL_Window* rawWindow = nullptr;
     Renderer::TextureManager* textureManager = nullptr;

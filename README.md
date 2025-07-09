@@ -1,4 +1,7 @@
 # Game
+> ![WARNING]
+> This repo is just made to work for me atm
+
 Simple game written in OpenGL using SDL3
 
 ## Development
