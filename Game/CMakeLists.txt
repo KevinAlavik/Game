@@ -1,4 +1,4 @@
-set(SDL3_DIR "${CMAKE_SOURCE_DIR}/external/SDL3")
+set(SDL3_DIR "${CMAKE_SOURCE_DIR}/External/SDL3")
 set(SDL3_LIB_DIR "${SDL3_DIR}/lib/x64")
 
 set(GAME_SOURCES 

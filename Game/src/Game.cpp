@@ -20,7 +20,6 @@ namespace Game {
     SDL_Window* rawWindow = nullptr;
     Renderer::TextureManager* textureManager = nullptr;
     Math::Vector2f screenSize(900.0f, 700.0f);
-
     Renderer::TextureData* shrekTexture = nullptr;
 }
 

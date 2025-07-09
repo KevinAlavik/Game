@@ -13,10 +13,10 @@ foreach(OUTPUTCONFIG IN ITEMS Debug Release RelWithDebInfo MinSizeRel)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG_UPPER} "${CMAKE_BINARY_DIR}/out/${OUTPUTCONFIG}")
 endforeach()
 
-set(SDL3_DIR "${CMAKE_SOURCE_DIR}/external/SDL3")
+set(SDL3_DIR "${CMAKE_SOURCE_DIR}/External/SDL3")
 set(SDL3_INCLUDE_DIR "${SDL3_DIR}/include")
 set(SDL3_LIB_DIR "${SDL3_DIR}/lib/x64")
-set(IMGUI_DIR "${CMAKE_SOURCE_DIR}/external/imgui")
+set(IMGUI_DIR "${CMAKE_SOURCE_DIR}/External/imgui")
 
 set(ENGINE_SOURCES
     src/Renderer/Draw.cpp
