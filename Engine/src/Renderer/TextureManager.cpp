@@ -3,7 +3,11 @@
 #include <vector>
 #include <stdexcept>
 #include <SDL3/SDL.h>
+#if _WIN32
 #include <SDL3/SDL_image.h>
+#else
+#include <SDL3_image/SDL_image.h>
+#endif
 #include <Core/Exceptions.hpp>
 
 using namespace Renderer;

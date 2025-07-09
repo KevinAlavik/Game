@@ -15,3 +15,16 @@ endforeach()
 
 add_subdirectory(Engine)
 add_subdirectory(Game)
+
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/assets" DESTINATION "assets")
+
+if(WIN32)
+    set(SDL3_DIR "${CMAKE_SOURCE_DIR}/External/SDL3")
+    set(SDL3_LIB_DIR "${SDL3_DIR}/lib/x64")
+
+    install(FILES
+        "${SDL3_LIB_DIR}/SDL3.dll"
+        "${SDL3_LIB_DIR}/SDL3_image.dll"
+        DESTINATION "."
+    )
+endif()
