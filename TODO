@@ -15,3 +15,6 @@
 
 == INPUT ==
 [ ] Fix weird keyboard input issues
+
+== PHYSICS ==
+[ ] Implement basic AABB collision
