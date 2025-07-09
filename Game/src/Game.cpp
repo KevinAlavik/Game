@@ -93,10 +93,10 @@ namespace {
         ImGui::NewFrame();
 
         bool show_window = false;
-        ImGui::Begin("Controls", &show_window, ImGuiWindowFlags_NoResize);
-        ImGui::Text("Use WASD to move the texture");
-        ImGui::Text("Left click and drag to move the texture around");
-        ImGui::Text("Press ESC to exit");
+        ImGui::Begin("Debug", &show_window, ImGuiWindowFlags_AlwaysAutoResize);
+		ImGui::Text("FPS: %.1f", Game::window->GetFPS());
+		ImGui::Text("Mouse Position: (%.1f, %.1f)", Core::Input::GetMousePosition().x, Core::Input::GetMousePosition().y);
+		ImGui::Text("Keyboard Input (Pressed): %s", SDL_GetScancodeName(Core::Input::GetKeyPressed()));
         ImGui::End();
 	}
 
@@ -111,9 +111,16 @@ namespace {
         const float moveSpeed = 300.0f; // pixels per second
 
         while (!Game::window->ShouldExit()) {
+            // Poll events
+            Game::window->Poll();
+
+            // Feed events to ImGui
+            SDL_Event e = Game::window->GetLastEvent();
+            ImGui_ImplSDL3_ProcessEvent(&e);
+
             // Update FPS
             Game::window->UpdateFPS();
-            Game::window->SetTitle("Game - FPS: " + std::to_string(Game::window->GetFPS()));
+			Game::window->SetTitle("Game - FPS: " + std::to_string(static_cast<int>(Game::window->GetFPS() + 0.5f)));
             float deltaTime = Game::window->GetDeltaTime();
 
             // Render ImGui frame
@@ -184,14 +191,6 @@ namespace {
             
 			// Finish the rendering
             Renderer::Render(Game::window);
-
-            // Poll events
-            Game::window->Poll();
-
-            // Feed events to ImGui and your input system
-            SDL_Event e = Game::window->GetLastEvent();
-            ImGui_ImplSDL3_ProcessEvent(&e);
-            Core::Input::ProcessEvent(e);
         }
     }
 }

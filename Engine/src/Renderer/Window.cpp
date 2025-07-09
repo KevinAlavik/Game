@@ -90,21 +90,17 @@ void Window::UpdateFPS() {
         m_lastTime = now;
         m_prevFrameTime = now;
         m_deltaTime = 0.0f;
+        m_fps = 0.0f;
         return;
     }
 
     m_deltaTime = (now - m_prevFrameTime) / 1000.0f;
     m_prevFrameTime = now;
 
-    m_frameCount++;
-    uint64_t elapsed = now - m_lastTime;
-    if (elapsed >= 1000) {
-        m_fps = m_frameCount * 1000.0f / elapsed;
-        m_frameCount = 0;
-        m_lastTime = now;
-    }
+    float currentFPS = (m_deltaTime > 0.0f) ? (1.0f / m_deltaTime) : 0.0f;
+    const float smoothing = 0.1f;
+    m_fps = (1.0f - smoothing) * m_fps + smoothing * currentFPS;
 }
-
 
 float Window::GetFPS() const {
     return m_fps;

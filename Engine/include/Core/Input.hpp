@@ -13,6 +13,5 @@ namespace Core {
         // Keyboard input
         SDL_Scancode GetKeyPressed();
         bool IsKeyDown(SDL_Scancode key);
-        void ProcessEvent(const SDL_Event& event);
     }
 }

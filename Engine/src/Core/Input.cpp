@@ -3,8 +3,6 @@
 #include <Game.hpp>
 #include <unordered_set>
 
-static std::unordered_set<SDL_Scancode> keysHeld;
-
 namespace Core {
     namespace Input {
         // Mouse
@@ -29,16 +27,14 @@ namespace Core {
         }
 
         bool IsKeyDown(SDL_Scancode key) {
-            return keysHeld.contains(key);
-        }
-
-        void ProcessEvent(const SDL_Event& event) {
+            SDL_Event event = Game::window->GetLastEvent();
             if (event.type == SDL_EVENT_KEY_DOWN) {
-                keysHeld.insert(event.key.scancode);
+                return event.key.scancode == key;
             }
             else if (event.type == SDL_EVENT_KEY_UP) {
-                keysHeld.erase(event.key.scancode);
+                return false; // Key is not down if it's released
             }
+            return false;
         }
     }
 }

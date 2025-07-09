@@ -14,7 +14,10 @@
 [ ] Cleanup Game.cpp
 
 == INPUT ==
-[ ] Fix weird keyboard input issues
+[ ] Improve Core::Input::IsKeyDown();
 
 == PHYSICS ==
 [ ] Implement basic AABB collision
+
+== RENDERING ==
+[ ] Optimize shit
