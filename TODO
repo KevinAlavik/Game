@@ -9,8 +9,8 @@
 [ ] Sprite manager / Animation manager
 
 == STRUCTURE ==
-[ ] Move engine code into its own folder(s) and produce a library
-[ ] Link game with engine library (dll, etc.)
+[x] Move engine code into its own folder(s) and produce a library
+[x] Link game with engine library (dll, etc.)
 [ ] Cleanup Game.cpp
 
 == INPUT ==
@@ -21,3 +21,4 @@
 
 == RENDERING ==
 [ ] Optimize shit
+[ ] Add basic shader tests (pure OpenGL baby)

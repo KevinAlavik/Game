@@ -6,6 +6,8 @@
 /*.sln
 /*.vcxproj*
 /*.user
+/*.idea
+/*.vscode
 
 *.exe
 *.obj
