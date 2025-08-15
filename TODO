@@ -3,9 +3,9 @@
 [ ] Physics engine
 [ ] Object manager for items and entities
 [ ] Some kind of level format (Maybe JSON or custom binary based format)
-[ ] Audio managerr
+[ ] Audio manager
 [ ] Maybe networking??? (idk if we should do multiplayer or not)
-[ ] Maybe some kind of scripting engine like lua, for modding support
+[x] Maybe some kind of scripting engine like lua, for modding support
 [ ] Sprite manager / Animation manager
 
 == STRUCTURE ==
@@ -22,3 +22,7 @@
 == RENDERING ==
 [ ] Optimize shit
 [ ] Add basic shader tests (pure OpenGL baby)
+
+== GAME ==
+[x] Make engine call like "Setup" and "Update" (called from lua bootstrap)
+[x] Make game actually be written in lua

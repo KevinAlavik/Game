@@ -17,7 +17,7 @@ namespace Util {
             Error,
         };
 
-        constexpr Logger(std::string_view scope) : scope(scope) {}
+        constexpr Logger(std::string scope) : scope(scope) {}
 
         static void SetLogLevel(Level level) {
             currentLevel = level;
@@ -28,7 +28,7 @@ namespace Util {
         }
 
         template<typename... Args>
-        void Log(Level level, std::string_view fmt_str, Args&&... args) const {
+        void Log(Level level, std::string fmt_str, Args&&... args) const {
             if (level < currentLevel) return;
 
             std::lock_guard lock(outputMutex);
@@ -48,31 +48,31 @@ namespace Util {
         }
 
         template<typename... Args>
-        void Info(std::string_view fmt_str, Args&&... args) const {
+        void Info(std::string fmt_str, Args&&... args) const {
             Log(Level::Info, fmt_str, std::forward<Args>(args)...);
         }
 
         template<typename... Args>
-        void Warn(std::string_view fmt_str, Args&&... args) const {
+        void Warn(std::string fmt_str, Args&&... args) const {
             Log(Level::Warn, fmt_str, std::forward<Args>(args)...);
         }
 
         template<typename... Args>
-        void Error(std::string_view fmt_str, Args&&... args) const {
+        void Error(std::string fmt_str, Args&&... args) const {
             Log(Level::Error, fmt_str, std::forward<Args>(args)...);
         }
 
         template<typename... Args>
-        void Debug(std::string_view fmt_str, Args&&... args) const {
+        void Debug(std::string fmt_str, Args&&... args) const {
             Log(Level::Debug, fmt_str, std::forward<Args>(args)...);
         }
 
     private:
-        std::string_view scope;
+        std::string scope;
         inline static std::mutex outputMutex;
         inline static Level currentLevel = Level::Debug;
 
-        static constexpr std::string_view levelPrefix(Level level) {
+        static constexpr std::string levelPrefix(Level level) {
             switch (level) {
             case Level::Debug: return "DEBUG";
             case Level::Info:  return "INFO";
